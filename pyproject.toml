@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "imagestore"
+version = "0.1.0"
+description = ""
+authors = ["Victor Polyakov <polyakov.victor21@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.3"
+fastapi = "^0.100.0"
+uvicorn = "^0.23.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
