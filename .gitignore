@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 __pycache__/
 myenv/
+venv/
 .vscode/
 *.sqlite3
-=======
-__pycache__/
-myenv/
-.vscode/
-*.sqlite3
->>>>>>> 00cc49dcac644978c5fb69bfc28e14b06289a84b
 *.env
