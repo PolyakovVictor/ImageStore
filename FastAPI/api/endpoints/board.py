@@ -3,8 +3,12 @@ from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import BoardSchema, PinSchema, RequestBoard, Response
 import crud
+from models import Board, Pin
 
-router = APIRouter()
+router_board = APIRouter(
+    prefix="/board",
+    tags=["Board"]
+)
 
 
 def get_db():
@@ -15,26 +19,26 @@ def get_db():
         db.close()
 
 
-@router.post('/create')
+@router_board.post('/create')
 async def create(request: RequestBoard, db: Session = Depends(get_db)):
     return crud.create_board(db, request.parameter)
 
 
-@router.get('/')
+@router_board.get('/')
 async def get(db: Session = Depends(get_db)):
-    return crud.get_board(db, 0, 100)
+    return crud.get_all(db, Board, 0, 100)
 
 
-@router.get('/{id}')
+@router_board.get('/{id}')
 async def get_by_id(id: int, db: Session = Depends(get_db)):
-    return crud.get_board_by_id(db, id)
+    return crud.get_by_id(db, Board, id)
 
 
-@router.post("/update")
+@router_board.post("/update")
 async def update(request: RequestBoard, db: Session = Depends(get_db)):
     return crud.update_board(db, board_id=request.parameter.id, title=request.parameter.title, description=request.parameter.description)
 
 
-@router.post("/{id}")
+@router_board.post("/delete/{id}")
 async def delete(id: int, db: Session = Depends(get_db)):
-    return crud.remove_board(db, board_id=id)
+    return crud.remove(db, Board, id)

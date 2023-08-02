@@ -19,7 +19,7 @@ class PinSchema(BaseModel):
     id: Optional[int] = None
     image_url: Optional[str] = None
     description: Optional[str] = None
-    board_id: Optional[str] = None
+    board_id: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -27,6 +27,10 @@ class PinSchema(BaseModel):
 
 class RequestBoard(BaseModel):
     parameter: BoardSchema = Field(...)
+
+
+class RequestPin(BaseModel):
+    parameter: PinSchema = Field(...)
 
 
 class Response(BaseModel, Generic[T]):
