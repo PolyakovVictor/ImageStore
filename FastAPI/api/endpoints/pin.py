@@ -42,3 +42,8 @@ async def update(request: RequestPin, db: Session = Depends(get_db)):
 @router_pin.post("/delete/{id}")
 async def delete(id: int, db: Session = Depends(get_db)):
     return crud.remove(db, Pin, id)
+
+
+@router_pin.get("/pin_tags/{id}")
+async def get_tags_for_pin(id: int, db: Session = Depends(get_db)):
+    return crud.get_tags_for_pin(db, id)

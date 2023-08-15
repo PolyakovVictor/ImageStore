@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models import Board, Pin
-from schemas import BoardSchema, PinSchema
+from models import Board, Pin, Tag
+from schemas import BoardSchema, PinSchema, TagSchema
 
 
 def get_all(db: Session, object: BoardSchema, skip: int = 0, limit: int = 100):
@@ -43,9 +43,29 @@ def create_board(db: Session, object: BoardSchema):
     return _board
 
 
-def create_pin(db: Session, object: PinSchema):
-    _pin = Pin(image_url=object.image_url, description=object.description, board_id=object.board_id)
-    db.add(_pin)
+def create_pin(db: Session, pin: PinSchema):
+    tag_ids = pin.tag_id
+    pin_db = Pin(**pin.model_dump(exclude={"tag_id", "id"}))
+    for tag_id in tag_ids:
+        tag = db.query(Tag).filter(Tag.id == tag_id).first()
+        if tag:
+            pin_db.tags.append(tag)
+    db.add(pin_db)
     db.commit()
-    db.refresh(_pin)
-    return _pin
+    db.refresh(pin_db)
+    return pin_db
+
+
+def get_tags_for_pin(db: Session, pin_id: int):
+    pin = db.query(Pin).get(pin_id)
+    if pin:
+        return pin.tags
+    return []
+
+
+def create_tag(db: Session, object: TagSchema):
+    _tag = Tag(name=object.name)
+    db.add(_tag)
+    db.commit()
+    db.refresh(_tag)
+    return _tag

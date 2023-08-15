@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <img src="{% static pin.image_url %}" alt="{{ pin.title }}" class="img-fluid mb-3">
+            <h2>{{ pin.title }}</h2>
+            <p>Автор: {{ pin.author }}</p>
+            <p>{{ pin.description }}</p>
+            <p>Теги: {% for tag in tags %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Похожие картинки:</h3>
+    <!-- <div class="row">
+        {% for similar_pin in similar_pins %}
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'imageStore:pin_detail' similar_pin.id %}">
+                <img src="{% static similar_pin.image_url %}" alt="{{ similar_pin.title }}" class="img-fluid">
+            </a>
+        </div>
+        {% endfor %}
+    </div> -->
+</div>
+{% endblock %}
