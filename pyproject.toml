@@ -13,6 +13,8 @@ uvicorn = "^0.23.0"
 sqlalchemy = "^2.0.19"
 python-dotenv = "^1.0.0"
 pyscopg2 = "^66.0.2"
+pyjwt = "^2.8.0"
+python-decouple = "^3.8"
 
 
 [build-system]
