@@ -40,7 +40,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect('imageStoreApp:home')
-    return render(request, 'registration/login.html') 
+    return render(request, 'registration/login.html')
 
 
 def logout_view(request):
