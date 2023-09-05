@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'imageStoreApp',
     'rest_framework',
     'rest_framework.authtoken',
+    'account',
 ]
 
 MIDDLEWARE = [

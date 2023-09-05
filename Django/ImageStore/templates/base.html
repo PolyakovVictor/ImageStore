@@ -31,15 +31,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">{{ user }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'imageStoreApp:logout' %}">Logout</a>
-                    </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'imageStoreApp:login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'account:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'imageStoreApp:registration' %}">Registration</a>
+                        <a class="nav-link" href="{% url 'account:register' %}">Registration</a>
                     </li>
                 {% endif %}
             </ul>
