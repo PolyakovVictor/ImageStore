@@ -1,0 +1,91 @@
+.vh-adjusted-section{
+    height: calc(100vh - 74px);
+  }
+
+.body-base-page {
+  background-color: #FBF3F2;
+}
+
+.navbar {
+  background-color: #FBF3F2;
+}
+
+.navbar-brand {
+  font-size: 2rem !important;
+  font-family: 'Dancing Script', cursive;
+}
+
+.nav-link {
+  font-size: 1.5rem !important;
+  font-family: 'Caveat';
+}
+
+.card-body {
+  background-color: #032539;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+.card {
+  background-color: #FBF3F2 !important;
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+.card-img-top {
+  border-radius: 30px !important;
+  box-shadow: 10px 5px 5px rgba(3, 37, 57, 0.15);;
+}
+
+.card-title {
+  color: #1C768F !important;
+  font-family: 'Nunito', sans-serif;
+}
+
+.card-body-auth {
+  border-radius: 30px;
+}
+
+.img-fluid {
+    max-width: 100%;
+    max-height: 80vh !important;
+}
+
+.text-auth, .text-auth-logo{
+  color: #1C768F !important;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.text-auth-logo {
+  font-weight: bold;
+}
+
+.btn-auth {
+  background-color:#FA991C !important;
+  border-color:#FA991C !important;
+}
+
+.img-pin {
+  border-radius: 30px !important;
+}
+
+.div-pin-detail {
+  background-color: #032539;
+  border-radius: 30px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 25px;
+}
+
+.col-md-6 {
+  color: #FBF3F2;
+  padding: 0 0 0 0 !important;
+}
+
+.div-pin-info {
+  padding-left: 15px !important;
+  padding-top: 15px !important;
+}
+
+u {
+  color: #1C768F;
+}

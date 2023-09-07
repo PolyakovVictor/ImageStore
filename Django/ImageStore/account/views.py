@@ -4,6 +4,7 @@ from .serializers import UserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -16,6 +17,11 @@ def register_view(request):
 
 def login_view(request):
     return render(request, 'account/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('imageStoreApp:home')
 
 
 @api_view(['POST'])

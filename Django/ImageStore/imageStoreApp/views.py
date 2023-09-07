@@ -16,3 +16,7 @@ def pin_detail(request, id):
         'tags': tags,
     }
     return render(request, 'imageStore/pin_detail.html', context)
+
+
+def test_view(request):
+    return render(request, 'imageStore/test.html')
