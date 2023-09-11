@@ -10,25 +10,26 @@
             <div class="card-body-auth card-body p-5">
               <h2 class="text-auth-logo text-auth text-uppercase text-center mb-5">LOGIN</h2>
 
-              <form>
+              <form id="form-id">
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
-                  <label class="text-auth form-label" for="form3Example3cg">Your Email</label>
+                  <input name="username" id="username" type="text" class="form-control form-control-lg" />
+                  <label class="text-auth form-label" for="form3Example3cg">Username</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4cg" class="form-control form-control-lg" />
+                  <input name="password" id="password" type="password" class="form-control form-control-lg" />
                   <label class="text-auth form-label" for="form3Example4cg">Password</label>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="button"
+                    <button type="button" id="btn-submit"
                     class="btn-auth text-auth btn btn-success btn-block btn-lg gradient-custom-4 ">Login</button>
                 </div>
 
                 <p class="text-auth text-center mt-5 mb-0">No account? <a href="{% url 'account:register' %}"
                     class="fw-bold text-body"><u>Registration</u></a></p>
+                <span id="error-message" class="error"></span>
 
               </form>
 
@@ -39,4 +40,39 @@
     </div>
   </div>
 </section>
+<script>
+  async function loginForm(event){
+    const form = document.querySelector('#form-id'); // Замените на идентификатор вашей HTML-формы
+    const errorMessage = document.querySelector('#error-message');
+    const formData = new FormData(form);
+    const url = 'http://127.0.0.1:8000/account/login_api/';
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+        localStorage.setItem('authToken', token);
+        
+      } else {
+        const data = await response.json();
+        errorMessage.textContent = data.error;
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+      errorMessage.textContent = 'Error, please try again.';
+    }
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    const submitButton = document.querySelector('#btn-submit')
+    submitButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      loginForm(e);
+    });
+  });
+</script>
 {% endblock %}

@@ -86,6 +86,10 @@
   padding-top: 15px !important;
 }
 
+.error {
+  color: red;
+}
+
 u {
   color: #1C768F;
 }

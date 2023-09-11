@@ -10,36 +10,39 @@
             <div class="card-body-auth card-body p-5">
               <h2 class="text-auth-logo text-auth text-uppercase text-center mb-5">Create an account</h2>
 
-              <form>
-
+              <form method="post" id="form-id">
+                {% csrf_token %}
                 <div class="form-outline mb-4">
-                  <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
+                  <input name="username" type="text" id="username" class="form-control form-control-lg" />
                   <label class="text-auth form-label" for="form3Example1cg">Your Name</label>
+                  <span id="username-error" class="error"></span>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                  <input name="email" type="email" id="email" class="form-control form-control-lg" />
                   <label class="text-auth form-label" for="form3Example3cg">Your Email</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4cg" class="form-control form-control-lg" />
+                  <input name="password1" type="password" id="password1" class="form-control form-control-lg" />
                   <label class="text-auth form-label" for="form3Example4cg">Password</label>
+                  <span id="password-error" class="error"></span>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" />
+                  <input name="password2" type="password" id="password2" class="form-control form-control-lg" />
                   <label class="text-auth form-label" for="form3Example4cdg">Repeat your password</label>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <button type="button"
+                  <button id="btn-submit" type="submit"
                     class="btn-auth text-auth btn btn-success btn-block btn-lg gradient-custom-4">Register</button>
                 </div>
 
                 <p class="text-auth text-center mt-5 mb-0">Have already an account? <a href="{% url 'account:login' %}"
                     class="fw-bold text-body"><u>Login here</u></a></p>
-
+                <span id="error-message" class="error"></span>
+                  
               </form>
 
             </div>
@@ -48,6 +51,113 @@
       </div>
     </div>
   </div>
+  <script>
+      // document.addEventListener('DOMContentLoaded', function () {
+      //     const form = document.querySelector('#form-id'); // Замените на идентификатор вашей HTML-формы
+      //     const errorMessage = document.querySelector('#error-message');
+
+      //       form.addEventListener('submit', async function (e) {
+      //         e.preventDefault();
+
+      //         const formData = new FormData(form);
+      //         const url = 'http://127.0.0.1:8000/account/register_api/'; // Замените на URL вашего API
+
+      //         try {
+      //             const response = await fetch(url, {
+      //                 method: 'POST',
+      //                 body: formData,
+      //             });
+
+      //             if (response.ok) {
+      //                 // Успешно зарегистрировано
+      //                 window.location.href = 'http://127.0.0.1:8000/'; // Замените на страницу, которую вы хотите показать после успешной регистрации
+      //             } else {
+      //                 // Обработка ошибок
+      //                 const data = await response.json();
+      //                 errorMessage.textContent = data.error;
+      //             }
+      //         } catch (error) {
+      //             console.error('Ошибка:', error);
+      //             errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
+      //         }
+      //     });
+      // });
+
+      function validateForm(event) {
+        // Получаем значения полей формы
+        var username = document.getElementById("username").value;
+        var password1 = document.getElementById("password1").value;
+        var password2 = document.getElementById("password2").value;
+        var errorMessage = document.querySelector('#error-message');
+        // Проверка наличия имени пользователя
+        if (username.trim() === "") {
+            document.getElementById("username-error").textContent = "Введите имя пользователя";
+            event.preventDefault(); // Предотвратить отправку формы
+            console.log("TEST username")
+        } else {
+            document.getElementById("username-error").textContent = "";
+        }
+
+        // Проверка длины пароля
+        if (password1.length < 8) {
+            document.getElementById("password-error").textContent = "Пароль должен быть не менее 8 символов";
+            event.preventDefault(); // Предотвратить отправку формы
+            console.log("TEST pass1")
+        } else {
+            document.getElementById("password-error").textContent = "";
+        }
+
+        if (password1 !== password2) {
+            document.getElementById("password-error").textContent = "Пароли не совпадают";
+            event.preventDefault(); // Предотвратить отправку формы
+            console.log("TEST pass2")
+        } else {
+            document.getElementById("password-error").textContent = "";
+            registerUser();   
+        }
+    }
+
+    // Функция для регистрации пользователя
+    async function registerUser() {
+          console.log("TEST registration 1")
+          const form = document.querySelector('#form-id'); // Замените на идентификатор вашей HTML-формы
+          const errorMessage = document.querySelector('#error-message');
+          const formData = new FormData(form);
+          const url = 'http://127.0.0.1:8000/account/register_api/'; // Замените на URL вашего API
+          console.log(formData)
+
+          try {
+              const response = await fetch(url, {
+                  method: 'POST',
+                  body: formData,
+              });
+
+              if (response.ok) {
+                  const data = await response.json();
+                  const token = data.token;
+                  console.log(token);
+                  localStorage.setItem('authToken', token);
+                  // window.location.href = 'http://127.0.0.1:8000/'; // Замените на страницу, которую вы хотите показать после успешной регистрации
+              } else {
+                  // Обработка ошибок
+                  const data = await response.json();
+                  errorMessage.textContent = data.error;
+              }
+          } catch (error) {
+              console.error('Ошибка:', error);
+              errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
+          }
+          console.log("TEST registration 2")
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const submitButton = document.querySelector('#btn-submit')
+      submitButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        validateForm(e);
+      });
+    });
+    </script>
 </section>
 {% endblock %}
 
