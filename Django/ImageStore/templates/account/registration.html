@@ -52,64 +52,31 @@
     </div>
   </div>
   <script>
-      // document.addEventListener('DOMContentLoaded', function () {
-      //     const form = document.querySelector('#form-id'); // Замените на идентификатор вашей HTML-формы
-      //     const errorMessage = document.querySelector('#error-message');
-
-      //       form.addEventListener('submit', async function (e) {
-      //         e.preventDefault();
-
-      //         const formData = new FormData(form);
-      //         const url = 'http://127.0.0.1:8000/account/register_api/'; // Замените на URL вашего API
-
-      //         try {
-      //             const response = await fetch(url, {
-      //                 method: 'POST',
-      //                 body: formData,
-      //             });
-
-      //             if (response.ok) {
-      //                 // Успешно зарегистрировано
-      //                 window.location.href = 'http://127.0.0.1:8000/'; // Замените на страницу, которую вы хотите показать после успешной регистрации
-      //             } else {
-      //                 // Обработка ошибок
-      //                 const data = await response.json();
-      //                 errorMessage.textContent = data.error;
-      //             }
-      //         } catch (error) {
-      //             console.error('Ошибка:', error);
-      //             errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
-      //         }
-      //     });
-      // });
 
       function validateForm(event) {
-        // Получаем значения полей формы
         var username = document.getElementById("username").value;
         var password1 = document.getElementById("password1").value;
         var password2 = document.getElementById("password2").value;
         var errorMessage = document.querySelector('#error-message');
-        // Проверка наличия имени пользователя
         if (username.trim() === "") {
-            document.getElementById("username-error").textContent = "Введите имя пользователя";
-            event.preventDefault(); // Предотвратить отправку формы
+            document.getElementById("username-error").textContent = "Enter username";
+            event.preventDefault(); 
             console.log("TEST username")
         } else {
             document.getElementById("username-error").textContent = "";
         }
 
-        // Проверка длины пароля
         if (password1.length < 8) {
-            document.getElementById("password-error").textContent = "Пароль должен быть не менее 8 символов";
-            event.preventDefault(); // Предотвратить отправку формы
+            document.getElementById("password-error").textContent = "Password must be at least 8 characters long";
+            event.preventDefault(); 
             console.log("TEST pass1")
         } else {
             document.getElementById("password-error").textContent = "";
         }
 
         if (password1 !== password2) {
-            document.getElementById("password-error").textContent = "Пароли не совпадают";
-            event.preventDefault(); // Предотвратить отправку формы
+            document.getElementById("password-error").textContent = "Different passwords";
+            event.preventDefault();
             console.log("TEST pass2")
         } else {
             document.getElementById("password-error").textContent = "";
@@ -117,13 +84,11 @@
         }
     }
 
-    // Функция для регистрации пользователя
     async function registerUser() {
-          console.log("TEST registration 1")
-          const form = document.querySelector('#form-id'); // Замените на идентификатор вашей HTML-формы
+          const form = document.querySelector('#form-id');
           const errorMessage = document.querySelector('#error-message');
           const formData = new FormData(form);
-          const url = 'http://127.0.0.1:8000/account/register_api/'; // Замените на URL вашего API
+          const url = 'http://127.0.0.1:8000/account/register_api/';
           console.log(formData)
 
           try {
@@ -137,17 +102,15 @@
                   const token = data.token;
                   console.log(token);
                   localStorage.setItem('authToken', token);
-                  // window.location.href = 'http://127.0.0.1:8000/'; // Замените на страницу, которую вы хотите показать после успешной регистрации
+                  window.location.href = 'http://127.0.0.1:8000/account/login/';
               } else {
-                  // Обработка ошибок
                   const data = await response.json();
                   errorMessage.textContent = data.error;
               }
           } catch (error) {
-              console.error('Ошибка:', error);
-              errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
+              console.error('Error:', error);
+              errorMessage.textContent = 'Error, please try again';
           }
-          console.log("TEST registration 2")
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -160,6 +123,3 @@
     </script>
 </section>
 {% endblock %}
-
-
-	
