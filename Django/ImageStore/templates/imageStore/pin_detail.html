@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container">
+<div class="container div-pin">
     <div class="div-pin-detail row">
         <div class="col-md-6">
             <img src="{% static pin.image_url %}" alt="{{ pin.title }}" class="img-pin img-fluid">
@@ -16,7 +16,7 @@
             <!-- Вставьте сюда блок с комментариями -->
         </div>
     </div>
-    <h3 class="mt-4">Same pins:</h3>
+    <h3 class="div-pin-info mt-4">Same pins:</h3>
         <!-- <div class="row">
             {% for similar_pin in similar_pins %}
             <div class="col-md-4 mb-3">

@@ -93,3 +93,20 @@
 u {
   color: #1C768F;
 }
+
+.container {
+  border-radius: 30px;
+  padding: 48px !important;
+}
+
+.div-pin {
+  background-color: #032539;
+}
+
+.div-create-pin {
+  background-color: #032539 !important;
+}
+
+.mt-4 {
+  color: #FBF3F2;
+}
