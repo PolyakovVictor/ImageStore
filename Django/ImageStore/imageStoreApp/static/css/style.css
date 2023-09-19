@@ -110,3 +110,7 @@ u {
 .mt-4 {
   color: #FBF3F2;
 }
+
+.card-body p {
+  color: #1C768F;
+}

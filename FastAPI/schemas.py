@@ -21,10 +21,11 @@ class TagSchema(BaseModel):
 
 class PinSchema(BaseModel):
     id: Optional[int] = None
-    image_url: Optional[str] = None
+    title: Optional[str] = None
+    image: Optional[str] = None
     description: Optional[str] = None
     board_id: Optional[int] = None
-    tag_id: List[int]
+    tags: Optional[str] = None
 
     class Config:
         from_attributes = True

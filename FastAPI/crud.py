@@ -26,9 +26,9 @@ def update_board(db: Session, object_id: int, title: str, description: str):
     return _board
 
 
-def update_pin(db: Session, object: PinSchema, object_id: int, image_url: str, description: str):
+def update_pin(db: Session, object: PinSchema, object_id: int, image: str, description: str):
     _pin = get_by_id(db=db, object=object, object_id=object_id)
-    _pin.image_url = image_url if image_url else _pin.image_url
+    _pin.image = image if image else _pin.image
     _pin.description = description if description else _pin.description
     db.commit()
     db.refresh(_pin)
@@ -43,17 +43,17 @@ def create_board(db: Session, object: BoardSchema):
     return _board
 
 
-def create_pin(db: Session, pin: PinSchema):
-    tag_ids = pin.tag_id
-    pin_db = Pin(**pin.model_dump(exclude={"tag_id", "id"}))
-    for tag_id in tag_ids:
-        tag = db.query(Tag).filter(Tag.id == tag_id).first()
-        if tag:
-            pin_db.tags.append(tag)
-    db.add(pin_db)
-    db.commit()
-    db.refresh(pin_db)
-    return pin_db
+# def create_pin(db: Session, pin: PinSchema):
+#     tag_ids = pin.tag_id
+#     pin_db = Pin(**pin.model_dump(exclude={"tag_id", "id"}))
+#     for tag_id in tag_ids:
+#         tag = db.query(Tag).filter(Tag.id == tag_id).first()
+#         if tag:
+#             pin_db.tags.append(tag)
+#     db.add(pin_db)
+#     db.commit()
+#     db.refresh(pin_db)
+#     return pin_db
 
 
 def get_tags_for_pin(db: Session, pin_id: int):

@@ -35,7 +35,8 @@ def create_pin_view(request):
                 "title": title,
                 "image": image_base64,
                 "description": description,
-                "tags": tags
+                "board_id": '1',
+                "tags": tags,
             }
 
             try:
@@ -52,3 +53,6 @@ def create_pin_view(request):
         form = PinForm()
 
     return render(request, 'imageStore/create_pin.html')
+
+def  user_page_view(request):
+    return render(request, 'imageStore/user_page.html')

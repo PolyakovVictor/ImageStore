@@ -26,7 +26,8 @@ class Board(Base):
 class Pin(Base):
     __tablename__ = "pin"
     id = Column(Integer, primary_key=True, index=True)
-    image_url = Column(String, index=True)
+    title = Column(String, index=True)
+    image = Column(String, index=True)
     description = Column(String, index=True)
     board_id = Column(Integer, ForeignKey("boards.id"))
     tags = relationship("Tag", secondary=pin_tags, back_populates="pins")
