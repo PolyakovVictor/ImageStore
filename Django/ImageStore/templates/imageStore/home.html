@@ -5,14 +5,16 @@
         <h1 class="mt-4 mb-4">Pins</h1>
         <div class="row">
             {% for pin in pins %}
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img class="card-img-top" src="{% static pin.image_url %}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ pin.description }}</h5>
-                    </div>
+                <div class="col-md-4 mb-3 clickable-div">
+                    <a href="{% url 'imageStoreApp:pin_detail' pin.id %}">
+                        <div class="card">
+                            <img class="card-img-top" src="{% static pin.image_url %}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ pin.description }}</h5>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>

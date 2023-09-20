@@ -1,12 +1,14 @@
 from fastapi import APIRouter, HTTPException, Path, Depends
+from datetime import datetime
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import BoardSchema, PinSchema, RequestPin, RequestBoard, Response
 import crud
-from models import Pin
+import base64
+from models import Pin, Tag, Image
 
 router_pin = APIRouter(
-    prefix="/Pin",
+    prefix="/pin",
     tags=["pin"]
 )
 
@@ -19,9 +21,55 @@ def get_db():
         db.close()
 
 
-@router_pin.post('/create')
-async def create(request: RequestPin, db: Session = Depends(get_db)):
-    return crud.create_pin(db, request.parameter)
+@router_pin.post("/create")
+async def create_pin(pin_data: PinSchema, Session = Depends(get_db)):
+    try:
+        # Создать объект Image
+
+        db_pin = Pin(
+            title=pin_data.title,
+            image_id=pin_data.image_id,
+            description=pin_data.description,
+            board_id=pin_data.board_id,
+            tags=[]
+        )
+
+        Session.add(db_pin)
+
+        # Сохранить объекты в базе данных
+
+        Session.commit()
+
+        # Добавить теги к пину
+
+        tag_names = pin_data.tags.split(',')
+
+        for tag_name in tag_names:
+            tag_name = tag_name.strip()
+            if tag_name:
+                db_tag = Session.query(Tag).filter(Tag.name == tag_name).first()
+                if not db_tag:
+                    db_tag = Tag(name=tag_name)
+                    Session.add(db_tag)
+                    Session.commit()
+                    Session.refresh(db_tag)
+                db_pin.tags.append(db_tag)
+
+        # Сохранить изменения в базе данных
+
+        Session.commit()
+
+        print("Pin created successfully")
+        return {"message": "Pin created successfully"}
+
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
+    finally:
+        pass
+
+# @router_pin.post('/create')
+# async def create(request: RequestPin, db: Session = Depends(get_db)):
+#     return crud.create_pin(db, request.parameter)
 
 
 @router_pin.get('/')
@@ -36,9 +84,14 @@ async def get_by_id(id: int, db: Session = Depends(get_db)):
 
 @router_pin.post("/update")
 async def update(request: RequestPin, db: Session = Depends(get_db)):
-    return crud.update_pin(db, Pin, object_id=request.parameter.id, image_url=request.parameter.image_url, description=request.parameter.description)
+    return crud.update_pin(db, Pin, object_id=request.parameter.id, image=request.parameter.image, description=request.parameter.description)
 
 
 @router_pin.post("/delete/{id}")
 async def delete(id: int, db: Session = Depends(get_db)):
     return crud.remove(db, Pin, id)
+
+
+@router_pin.get("/pin_tags/{id}")
+async def get_tags_for_pin(id: int, db: Session = Depends(get_db)):
+    return crud.get_tags_for_pin(db, id)

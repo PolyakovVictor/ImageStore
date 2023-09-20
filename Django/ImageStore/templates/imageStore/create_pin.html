@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container div-create-pin mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-auth-logo text-auth text-uppercase text-center mb-5">CREATE A PIN</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title" class="text-auth form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="text-auth form-label">Image</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="text-auth form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="tags" class="text-auth form-label">Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="tags" name="tags" placeholder="e.g., travel, nature">
+                </div>
+                <button type="submit" class="btn-auth text-auth btn btn-success btn-block btn-lg gradient-custom-4 ">Create Pin</button>
+                {{ form.as_p }}
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-x6D7L5uLq7r8XCp6zU4Wz5z5P0s5Kf0IN5FVxF1f3Ck5u5I5P5F5V+A5P5F5V+A5P5F5V" crossorigin="anonymous"></script>
+{% endblock %}
