@@ -26,24 +26,37 @@ def create_pin_view(request):
         form = PinForm(request.POST, request.FILES)
         if form.is_valid():
             title = request.POST.get('title')
-            image = request.FILES.get('image')
             description = request.POST.get('description')
             tags = request.POST.get('tags')
-            image_bytes = form.cleaned_data['image'].read()
-            image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+            image = form.cleaned_data['image'].read()
+
+            def send_image_to_api(image):
+                url = 'http://localhost:8080/image/upload'
+                files = {'file': image}
+
+                try:
+                    response = requests.post(url, files=files)
+                    response.raise_for_status()
+                    return response.json()
+                except requests.exceptions.RequestException as e:
+                    print(f"Error when sending a request: {e}")
+                    return None
+
+            image_id = send_image_to_api(image)
+
             pin_data = {
                 "title": title,
-                "image": image_base64,
+                "image_id": image_id,
                 "description": description,
                 "board_id": '1',
                 "tags": tags,
             }
 
             try:
-                response = requests.post('http://localhost:8080/Pin/create', json=pin_data)
+                response = requests.post('http://localhost:8080/pin/create', json=pin_data)
 
                 if response.status_code == 200:
-                    return redirect('imageStoreApp/home')
+                    return redirect('imageStoreApp:home')
                 else:
                     return JsonResponse({"error": "Failed to create pin"}, status=response.status_code)
             

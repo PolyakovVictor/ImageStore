@@ -6,7 +6,7 @@ import crud
 from models import Tag
 
 router_tag = APIRouter(
-    prefix="/Tag",
+    prefix="/tag",
     tags=["tag"]
 )
 

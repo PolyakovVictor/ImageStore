@@ -1,13 +1,14 @@
 from fastapi import APIRouter, HTTPException, Path, Depends
+from datetime import datetime
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import BoardSchema, PinSchema, RequestPin, RequestBoard, Response
 import crud
 import base64
-from models import Pin, Tag
+from models import Pin, Tag, Image
 
 router_pin = APIRouter(
-    prefix="/Pin",
+    prefix="/pin",
     tags=["pin"]
 )
 
@@ -23,27 +24,24 @@ def get_db():
 @router_pin.post("/create")
 async def create_pin(pin_data: PinSchema, Session = Depends(get_db)):
     try:
-        if pin_data.image != None:
-            image_bits = base64.b64decode(pin_data.image.encode('utf-8'))
-            db_pin = Pin(
-                title=pin_data.title,
-                image=image_bits,
-                description=pin_data.description,
-                board_id=pin_data.board_id,
-                tags=[]
-            )
-        else:
-            db_pin = Pin(
-                title=pin_data.title,
-                description=pin_data.description,
-                board_id=pin_data.board_id,
-                tags=[]
-            )
+        # Создать объект Image
+
+        db_pin = Pin(
+            title=pin_data.title,
+            image_id=pin_data.image_id,
+            description=pin_data.description,
+            board_id=pin_data.board_id,
+            tags=[]
+        )
+
         Session.add(db_pin)
+
+        # Сохранить объекты в базе данных
+
         Session.commit()
-        Session.refresh(db_pin)
-        
-        print("in if")
+
+        # Добавить теги к пину
+
         tag_names = pin_data.tags.split(',')
 
         for tag_name in tag_names:
@@ -57,7 +55,10 @@ async def create_pin(pin_data: PinSchema, Session = Depends(get_db)):
                     Session.refresh(db_tag)
                 db_pin.tags.append(db_tag)
 
+        # Сохранить изменения в базе данных
+
         Session.commit()
+
         print("Pin created successfully")
         return {"message": "Pin created successfully"}
 
