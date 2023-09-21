@@ -1,13 +1,21 @@
-from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin
+from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin, get_image_by_id
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import PinForm
-import requests, base64
+import requests
 
 
 def home_view(request):
     pins_data = get_pins_data()
-    context = {'pins': pins_data}
+    updated_pins_data = []
+
+    for pin in pins_data:
+        image_id = pin['image_id']
+        image_info = get_image_by_id(image_id)
+        pin['image_info'] = image_info
+        updated_pins_data.append(pin)
+    context = {'pins': updated_pins_data}
+    print(context)
     return render(request, 'imageStore/home.html', context)
 
 
@@ -28,11 +36,11 @@ def create_pin_view(request):
             title = request.POST.get('title')
             description = request.POST.get('description')
             tags = request.POST.get('tags')
-            image = form.cleaned_data['image'].read()
+            image = form.cleaned_data['image']
 
-            def send_image_to_api(image):
+            def send_image_to_api(image, image_name):
                 url = 'http://localhost:8080/image/upload'
-                files = {'file': image}
+                files = {'file': (image_name, image)}
 
                 try:
                     response = requests.post(url, files=files)
@@ -42,7 +50,9 @@ def create_pin_view(request):
                     print(f"Error when sending a request: {e}")
                     return None
 
-            image_id = send_image_to_api(image)
+            image_name = image.name
+            image_data = image.read()
+            image_id = send_image_to_api(image_data, image_name)
 
             pin_data = {
                 "title": title,
@@ -59,7 +69,6 @@ def create_pin_view(request):
                     return redirect('imageStoreApp:home')
                 else:
                     return JsonResponse({"error": "Failed to create pin"}, status=response.status_code)
-            
             except requests.exceptions.RequestException as e:
                 return JsonResponse({"error": str(e)}, status=500)
     else:
@@ -67,5 +76,6 @@ def create_pin_view(request):
 
     return render(request, 'imageStore/create_pin.html')
 
-def  user_page_view(request):
+
+def user_page_view(request):
     return render(request, 'imageStore/user_page.html')

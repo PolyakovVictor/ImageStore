@@ -114,3 +114,7 @@ u {
 .card-body p {
   color: #1C768F;
 }
+
+.topic {
+  color: black !important;
+}

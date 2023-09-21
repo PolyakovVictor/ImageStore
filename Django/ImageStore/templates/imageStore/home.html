@@ -2,15 +2,15 @@
 {% load static %}
 {% block content %}
     <div class="container">
-        <h1 class="mt-4 mb-4">Pins</h1>
+        <h1 class="mt-4 mb-4 topic">Pins</h1>
         <div class="row">
             {% for pin in pins %}
                 <div class="col-md-4 mb-3 clickable-div">
                     <a href="{% url 'imageStoreApp:pin_detail' pin.id %}">
                         <div class="card">
-                            <img class="card-img-top" src="{% static pin.image_url %}">
+                            <img class="card-img-top" src="{% static 'images/' %}{{ pin.image_info.name }}">
                             <div class="card-body">
-                                <h5 class="card-title">{{ pin.description }}</h5>
+                                <h5 class="card-title">{{ pin.title }}</h5>
                             </div>
                         </div>
                     </a>

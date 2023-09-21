@@ -1,11 +1,9 @@
-from fastapi import APIRouter, HTTPException, Path, Depends
-from datetime import datetime
+from fastapi import APIRouter, HTTPException, Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from schemas import BoardSchema, PinSchema, RequestPin, RequestBoard, Response
+from schemas import PinSchema, RequestPin
 import crud
-import base64
-from models import Pin, Tag, Image
+from models import Pin, Tag
 
 router_pin = APIRouter(
     prefix="/pin",
@@ -22,7 +20,7 @@ def get_db():
 
 
 @router_pin.post("/create")
-async def create_pin(pin_data: PinSchema, Session = Depends(get_db)):
+async def create_pin(pin_data: PinSchema, Session=Depends(get_db)):
     try:
         # Создать объект Image
 
