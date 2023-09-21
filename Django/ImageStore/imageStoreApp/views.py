@@ -15,17 +15,19 @@ def home_view(request):
         pin['image_info'] = image_info
         updated_pins_data.append(pin)
     context = {'pins': updated_pins_data}
-    print(context)
     return render(request, 'imageStore/home.html', context)
 
 
-def pin_detail_view(request, id):
+def pin_detail_view(request, id, image_id):
     pin = get_pins_by_id(id=id)
     tags = get_tags_for_pin(id=id)
+    image = get_image_by_id(image_id)
     context = {
         'pin': pin,
         'tags': tags,
+        'image': image
     }
+    print(context)
     return render(request, 'imageStore/pin_detail.html', context)
 
 
