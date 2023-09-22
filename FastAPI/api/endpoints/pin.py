@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException, Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
@@ -93,3 +94,8 @@ async def delete(id: int, db: Session = Depends(get_db)):
 @router_pin.get("/pin_tags/{id}")
 async def get_tags_for_pin(id: int, db: Session = Depends(get_db)):
     return crud.get_tags_for_pin(db, id)
+
+
+@router_pin.post("/pin_sort_by_tags/")
+async def pins_sort_by_tags(tags: List[str], db: Session = Depends(get_db)):
+    return crud.pins_sort_by_tags(db, tags)

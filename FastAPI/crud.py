@@ -63,6 +63,13 @@ def get_tags_for_pin(db: Session, pin_id: int):
     return []
 
 
+def pins_sort_by_tags(db: Session, tags: list[str]):
+    pins_with_tags = (db.query(Pin).join(Pin.tags).filter(Tag.name.in_(tags)).all())
+    if pins_with_tags:
+        return pins_with_tags
+    return []
+
+
 def create_tag(db: Session, object: TagSchema):
     _tag = Tag(name=object.name)
     db.add(_tag)

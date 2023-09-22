@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, UploadFile, File
 from config import SessionLocal
 from sqlalchemy.orm import Session
 import crud
-import uuid
 from models import Image
 
 router_image = APIRouter(

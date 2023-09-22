@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
 <div class="container div-pin">
     <div class="div-pin-detail row">
         <div class="col-md-6">
@@ -15,16 +16,24 @@
             <h6>Comments</h6>
         </div>
     </div>
+</div>
+
+<div class="container">
     <h3 class="div-pin-info mt-4">Same pins:</h3>
-        <!-- <div class="row">
-            {% for similar_pin in similar_pins %}
-            <div class="col-md-4 mb-3">
-                <a href="{% url 'imageStore:pin_detail' similar_pin.id %}">
-                    <img src="{% static similar_pin.image_url %}" alt="{{ similar_pin.title }}" class="img-fluid">
+    <div class="row">
+        {% for similar_pin in similar_pins %}
+            <div data-aos="zoom-in-up" class="col-md-4 mb-3 clickable-div">
+                <a href="{% url 'imageStoreApp:pin_detail' similar_pin.id similar_pin.image_info.id %}">
+                    <div class="card">
+                        <img class="card-img-top img-fluid" src="{% static 'images/' %}{{ similar_pin.image_info.name }}" alt="{{ similar_pin.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ similar_pin.title }}</h5>
+                        </div>
+                    </div>
                 </a>
             </div>
-            {% endfor %}
-        </div> -->
+        {% endfor %}
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

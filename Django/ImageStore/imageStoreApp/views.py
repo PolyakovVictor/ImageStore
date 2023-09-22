@@ -1,4 +1,4 @@
-from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin, get_image_by_id
+from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin, get_image_by_id, pins_sort_by_tags
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import PinForm
@@ -22,12 +22,22 @@ def pin_detail_view(request, id, image_id):
     pin = get_pins_by_id(id=id)
     tags = get_tags_for_pin(id=id)
     image = get_image_by_id(image_id)
+    similar_pins_data = pins_sort_by_tags(tags=tags)
+    similar_pins = []
+    for similar_pin in similar_pins_data:
+        if similar_pin['id'] != pin['id']:
+            image_id = similar_pin['image_id']
+            image_info = get_image_by_id(image_id)
+            similar_pin['image_info'] = image_info
+            similar_pins.append(similar_pin)
+        else:
+            pass
     context = {
         'pin': pin,
         'tags': tags,
-        'image': image
+        'image': image,
+        'similar_pins': similar_pins
     }
-    print(context)
     return render(request, 'imageStore/pin_detail.html', context)
 
 
