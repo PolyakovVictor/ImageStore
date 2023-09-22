@@ -1,6 +1,5 @@
-from typing import Optional, Generic, TypeVar, List
+from typing import Optional, Generic, TypeVar
 from pydantic import BaseModel, Field
-from fastapi import UploadFile
 
 T = TypeVar('T')
 
@@ -23,10 +22,11 @@ class TagSchema(BaseModel):
 class PinSchema(BaseModel):
     id: Optional[int] = None
     title: Optional[str] = None
-    image_id: Optional[int] = None
     description: Optional[str] = None
-    board_id: Optional[int] = None
     tags: Optional[str] = None
+    user_id: Optional[int] = None
+    image_id: Optional[int] = None
+    board_id: Optional[int] = None
 
     class Config:
         from_attributes = True

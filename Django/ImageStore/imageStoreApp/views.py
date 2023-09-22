@@ -45,6 +45,7 @@ def create_pin_view(request):
     if request.method == 'POST':
         form = PinForm(request.POST, request.FILES)
         if form.is_valid():
+            user = request.user
             title = request.POST.get('title')
             description = request.POST.get('description')
             tags = request.POST.get('tags')
@@ -75,7 +76,7 @@ def create_pin_view(request):
             }
 
             try:
-                response = requests.post('http://localhost:8080/pin/create', json=pin_data)
+                response = requests.post('http://localhost:8080/pin/create', json=pin_data, headers={'Authorization': f'Bearer {user.id}'})
 
                 if response.status_code == 200:
                     return redirect('imageStoreApp:home')
@@ -87,6 +88,10 @@ def create_pin_view(request):
         form = PinForm()
 
     return render(request, 'imageStore/create_pin.html')
+
+
+def favorite_view(request):
+    return render(request, 'imageStore/favorite.html')
 
 
 def user_page_view(request):

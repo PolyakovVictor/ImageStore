@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from config import SessionLocal
 from sqlalchemy.orm import Session
 from schemas import PinSchema, RequestPin
@@ -21,14 +21,17 @@ def get_db():
 
 
 @router_pin.post("/create")
-async def create_pin(pin_data: PinSchema, Session=Depends(get_db)):
+async def create_pin(pin_data: PinSchema, Session=Depends(get_db), authorization: str = Header(None)):
     try:
         # Создать объект Image
-
+        _, token = authorization.split("Bearer ")
+        user_id = int(token)
+        print("fastapi test Authorization: ", user_id)
         db_pin = Pin(
             title=pin_data.title,
             image_id=pin_data.image_id,
             description=pin_data.description,
+            user_id=user_id,
             board_id=pin_data.board_id,
             tags=[]
         )
