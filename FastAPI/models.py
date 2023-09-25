@@ -35,6 +35,8 @@ class Pin(Base):
     tags = relationship("Tag", secondary=pin_tags, back_populates="pins")
     board = relationship("Board", back_populates="pins")
 
+    favorite_pins = relationship("FavoritePin", back_populates="pin")
+
 
 class Tag(Base):
     __tablename__ = "tag"
@@ -56,3 +58,12 @@ class Image(Base):
 
     def __repr__(self):
         return f"Image(id={self.id}, name={self.name}, size={self.size}, type={self.type}, modified_at={self.modified_at})"
+
+
+class FavoritePin(Base):
+    __tablename__ = "favorite_pins"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    pin_id = Column(Integer, ForeignKey("pin.id"))
+
+    pin = relationship("Pin", back_populates="favorite_pins")

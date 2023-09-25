@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import Board, Pin, Tag
+from models import Board, Pin, Tag, FavoritePin
 from schemas import BoardSchema, PinSchema, TagSchema
 
 
@@ -13,6 +13,7 @@ def get_by_id(db: Session, object: Board, object_id: int):
 
 def remove(db: Session, object: Board, object_id: int):
     _object = get_by_id(db=db, object=object, object_id=object_id)
+    print('test object', _object, object, object_id)
     db.delete(_object)
     db.commit()
 

@@ -3,6 +3,27 @@
 {% block content %}
 
 <div class="container div-pin">
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'imageStoreApp:add_pin_to_favorite' pin.id image.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="pin_id" value="{{ pin.id }}">
+        <input type="hidden" name="user_id" value="{{ user_id}}">
+        <button class="btn-favorite btn btn-primary" id="favorite-button">
+            {% if favorite_check != 0 %}
+                <img src="{% static 'imageStore_img/star-fill.svg' %}" alt="Favorite" id="favorite-icon">
+            {% else %}
+                <img src="{% static 'imageStore_img/star.svg' %}" alt="Favorite" id="favorite-icon">
+            {% endif %}
+        </button>
+    </form>
+    {% else %}
+        <form method="post" action="{% url 'account:login' %}">
+            {% csrf_token %}
+            <button class="btn-favorite btn btn-primary" id="favorite-button">
+                    <img src="{% static 'imageStore_img/star.svg' %}" alt="Favorite" id="favorite-icon">
+            </button>
+        </form>
+    {% endif %}
     <div class="div-pin-detail row">
         <div class="col-md-6">
             <img src="{% static 'images/' %}{{ image.name }}" alt="{{ pin.title }}" class="img-pin img-fluid">

@@ -13,6 +13,7 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
+
 class PinForm(forms.Form):
     title = forms.CharField(max_length=255, required=True)
     image = forms.ImageField(required=True)
@@ -23,3 +24,8 @@ class PinForm(forms.Form):
         tags = self.cleaned_data['tags']
         tags = [tag.strip() for tag in tags.split(',') if tag.strip()]
         return tags
+
+
+class AddFavoritePinForm(forms.Form):
+    pin_id = forms.IntegerField()
+    user_id = forms.IntegerField()

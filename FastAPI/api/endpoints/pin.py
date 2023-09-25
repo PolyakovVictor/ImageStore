@@ -2,9 +2,9 @@ from typing import List
 from fastapi import APIRouter, HTTPException, Depends, Header
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from schemas import PinSchema, RequestPin
+from schemas import PinSchema, RequestPin, RequestFavoritePin
 import crud
-from models import Pin, Tag
+from models import Pin, Tag, FavoritePin
 
 router_pin = APIRouter(
     prefix="/pin",
@@ -21,12 +21,10 @@ def get_db():
 
 
 @router_pin.post("/create")
-async def create_pin(pin_data: PinSchema, Session=Depends(get_db), authorization: str = Header(None)):
+async def create_pin(pin_data: PinSchema, db: Session = Depends(get_db), authorization: str = Header(None)):
     try:
-        # Создать объект Image
         _, token = authorization.split("Bearer ")
         user_id = int(token)
-        print("fastapi test Authorization: ", user_id)
         db_pin = Pin(
             title=pin_data.title,
             image_id=pin_data.image_id,
@@ -36,30 +34,23 @@ async def create_pin(pin_data: PinSchema, Session=Depends(get_db), authorization
             tags=[]
         )
 
-        Session.add(db_pin)
-
-        # Сохранить объекты в базе данных
-
-        Session.commit()
-
-        # Добавить теги к пину
+        db.add(db_pin)
+        db.commit()
 
         tag_names = pin_data.tags.split(',')
 
         for tag_name in tag_names:
             tag_name = tag_name.strip()
             if tag_name:
-                db_tag = Session.query(Tag).filter(Tag.name == tag_name).first()
+                db_tag = db.query(Tag).filter(Tag.name == tag_name).first()
                 if not db_tag:
                     db_tag = Tag(name=tag_name)
-                    Session.add(db_tag)
-                    Session.commit()
-                    Session.refresh(db_tag)
+                    db.add(db_tag)
+                    db.commit()
+                    db.refresh(db_tag)
                 db_pin.tags.append(db_tag)
 
-        # Сохранить изменения в базе данных
-
-        Session.commit()
+        db.commit()
 
         print("Pin created successfully")
         return {"message": "Pin created successfully"}
@@ -102,3 +93,25 @@ async def get_tags_for_pin(id: int, db: Session = Depends(get_db)):
 @router_pin.post("/pin_sort_by_tags/")
 async def pins_sort_by_tags(tags: List[str], db: Session = Depends(get_db)):
     return crud.pins_sort_by_tags(db, tags)
+
+
+@router_pin.post("/add_to_favorite_pin/")
+async def add_pin_to_favorite(request: RequestFavoritePin, db: Session = Depends(get_db)):
+    pin_id = request.parameter.pin_id
+    user_id = request.parameter.user_id
+    favorite_pin = FavoritePin(pin_id=pin_id, user_id=user_id)
+    db.add(favorite_pin)
+    db.commit()
+    db.refresh(favorite_pin)
+    return favorite_pin
+
+
+@router_pin.post("/get_favorite_pin_for_user/{user_id}")
+async def get_favorite_pin_for_user(user_id: int, db: Session = Depends(get_db)):
+    favorite_pins = db.query(FavoritePin).filter(FavoritePin.user_id == user_id).all()
+    return favorite_pins
+
+
+@router_pin.delete("/remove_favorite_pin/{favorite_pin_id}")
+async def remove_favorite_pin(favorite_pin_id: int, db: Session = Depends(get_db)):
+    return crud.remove(db, FavoritePin, favorite_pin_id)

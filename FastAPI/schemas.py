@@ -32,6 +32,18 @@ class PinSchema(BaseModel):
         from_attributes = True
 
 
+class FavoritePinSchema(BaseModel):
+    user_id: int
+    pin_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class RequestFavoritePin(BaseModel):
+    parameter: FavoritePinSchema = Field(...)
+
+
 class RequestBoard(BaseModel):
     parameter: BoardSchema = Field(...)
 
@@ -42,6 +54,7 @@ class RequestPin(BaseModel):
 
 class RequestTag(BaseModel):
     parameter: TagSchema = Field(...)
+
 
 
 class Response(BaseModel, Generic[T]):

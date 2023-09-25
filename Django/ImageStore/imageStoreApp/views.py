@@ -1,4 +1,4 @@
-from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin, get_image_by_id, pins_sort_by_tags
+from .utils import get_pins_data, get_pins_by_id, get_tags_for_pin, get_image_by_id, pins_sort_by_tags, get_favorite_pins, check_on_favorite, add_pin_to_favorite, remove_pin_from_favorite
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import PinForm
@@ -19,11 +19,14 @@ def home_view(request):
 
 
 def pin_detail_view(request, id, image_id):
+    user = request.user
+    print(user.id)
     pin = get_pins_by_id(id=id)
     tags = get_tags_for_pin(id=id)
     image = get_image_by_id(image_id)
     similar_pins_data = pins_sort_by_tags(tags=tags)
     similar_pins = []
+
     for similar_pin in similar_pins_data:
         if similar_pin['id'] != pin['id']:
             image_id = similar_pin['image_id']
@@ -32,12 +35,26 @@ def pin_detail_view(request, id, image_id):
             similar_pins.append(similar_pin)
         else:
             pass
-    context = {
-        'pin': pin,
-        'tags': tags,
-        'image': image,
-        'similar_pins': similar_pins
-    }
+
+    favorite_check = check_on_favorite(user, id)
+    if favorite_check != 0:
+        context = {
+            'pin': pin,
+            'tags': tags,
+            'image': image,
+            'similar_pins': similar_pins,
+            'favorite_check': favorite_check['pin_id'],
+            'user_id': user.id
+        }
+    else:
+        context = {
+            'pin': pin,
+            'tags': tags,
+            'image': image,
+            'similar_pins': similar_pins,
+            'favorite_check': 0,
+            'user_id': user.id
+        }
     return render(request, 'imageStore/pin_detail.html', context)
 
 
@@ -91,8 +108,38 @@ def create_pin_view(request):
 
 
 def favorite_view(request):
-    return render(request, 'imageStore/favorite.html')
+    user = request.user
+    pins = []
+    favorite_pins = []
+    favorite_pins_id_raw = get_favorite_pins(user)
+    favorite_pins_id = [item['pin_id'] for item in favorite_pins_id_raw]
+    for pin_id in favorite_pins_id:
+        pins_data = get_pins_by_id(pin_id)
+        pins.append(pins_data)
+
+    for pin in pins:
+        image_id = pin['image_id']
+        image_info = get_image_by_id(image_id)
+        pin['image_info'] = image_info
+        favorite_pins.append(pin)
+
+    context = {
+        'favorite_pins': favorite_pins,
+    }
+
+    return render(request, 'imageStore/favorite.html', context)
 
 
 def user_page_view(request):
     return render(request, 'imageStore/user_page.html')
+
+
+def add_pin_to_favorite_view(request, pin_id, image_id):
+    user = request.user
+    favorite_check = check_on_favorite(user, pin_id)
+    if favorite_check != 0:
+        remove_pin_from_favorite(favorite_check['id'])
+        return redirect('imageStoreApp:pin_detail', pin_id, image_id)
+    else:
+        add_pin_to_favorite(pin_id, user.id)
+        return redirect('imageStoreApp:pin_detail', pin_id, image_id)

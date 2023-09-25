@@ -118,3 +118,11 @@ u {
 .topic {
   color: black !important;
 }
+
+.btn-favorite {
+  height: 38px !important;
+  width: 38px !important;
+  float: right;
+  padding-left: 10px !important;
+  padding-top: 5px !important;
+}

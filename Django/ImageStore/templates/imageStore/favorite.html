@@ -4,16 +4,19 @@
 <div class="row">
     <div class="col-md-8">
       <h2>Last saved images</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <img src="https://picsum.photos/500/500" class="card-img-top" alt="Image">
-            <div class="card-body">
-              <h5 class="card-title">Image title</h5>
-              <p class="card-text">Description</p>
-            </div>
+        <div class="row">
+        {% for pin in favorite_pins %}
+          <div data-aos="zoom-in-up" class="col-md-4 mb-3 clickable-div">
+              <a href="{% url 'imageStoreApp:pin_detail' pin.id pin.image_info.id %}">
+                  <div class="card">
+                      <img class="card-img-top img-fluid" src="{% static 'images/' %}{{ pin.image_info.name }}" alt="{{ pin.title }}">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ pin.title }}</h5>
+                      </div>
+                  </div>
+              </a>
           </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="col-md-4">
