@@ -126,3 +126,12 @@ u {
   padding-left: 10px !important;
   padding-top: 5px !important;
 }
+
+.dropdown-menu {
+  display: none;
+  background-color: #FBF3F2;
+}
+
+.dropdown-item {
+  background-color: #FBF3F2;
+}

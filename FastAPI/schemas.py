@@ -8,7 +8,7 @@ class BoardSchema(BaseModel):
     id: Optional[int] = None
     title: Optional[str] = None
     description: Optional[str] = None
-    owner_id: Optional[int] = None
+    user_id: Optional[int] = None
 
     class Config:
         from_attributes = True

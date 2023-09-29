@@ -3,58 +3,38 @@
 {% block content %}
 <div class="row">
     <div class="col-md-8">
-      <h2>Последние сохраненные изображения</h2>
+      <h2>Your pins</h2>
       <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <img src="https://picsum.photos/500/500" class="card-img-top" alt="Изображение">
-            <div class="card-body">
-              <h5 class="card-title">Заголовок изображения</h5>
-              <p class="card-text">Описание изображения</p>
-            </div>
+        {% for pin in pins %}
+          <div class="col-md-4">
+            <a href="{% url 'imageStoreApp:pin_detail' pin.id pin.image_info.id %}">
+              <div class="card">
+                <img src="{% static 'images/' %}{{ pin.image_info.name }}" class="card-img-top" alt="{{ pin.title }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ pin.title }}</h5>
+                  <p class="card-text">{{ pin.description }}</p>
+                </div>
+              </div>
+            </a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card">
-            <img src="https://picsum.photos/500/500" class="card-img-top" alt="Изображение">
-            <div class="card-body">
-              <h5 class="card-title">Заголовок изображения</h5>
-              <p class="card-text">Описание изображения</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card">
-            <img src="https://picsum.photos/500/500" class="card-img-top" alt="Изображение">
-            <div class="card-body">
-              <h5 class="card-title">Заголовок изображения</h5>
-              <p class="card-text">Описание изображения</p>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="col-md-4">
-      <h2>Рекомендуемые доски</h2>
+      <h2>Your boards</h2>
       <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <img src="https://picsum.photos/200/200" class="card-img-top" alt="Доска">
-            <div class="card-body">
-              <h5 class="card-title">Название доски</h5>
-              <p class="card-text">Описание доски</p>
-            </div>
+        {% for board in boards %}
+          <div class="col-md-6">
+            <a href="{% url 'imageStoreApp:board_detail' board.id %}">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ board.title }}</h5>
+                  <p class="card-text">{{ board.description }}</p>
+                </div>
+              </div>
+            </a>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <img src="https://picsum.photos/200/200" class="card-img-top" alt="Доска">
-            <div class="card-body">
-              <h5 class="card-title">Название доски</h5>
-              <p class="card-text">Описание доски</p>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
 </div>

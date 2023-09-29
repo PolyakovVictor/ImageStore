@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <h1>Название вашей доски</h1>
+        </div>
+        <div class="col-md-3 text-right">
+            <a href="{% url 'imageStoreApp:create_pin' %}" class="btn btn-primary">Добавить пин</a>
+        </div>
+    </div>
+    <div class="row">
+        {% for pin in pins %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ pin.image_url }}" class="card-img-top" alt="{{ pin.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ pin.title }}</h5>
+                        <p class="card-text">{{ pin.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

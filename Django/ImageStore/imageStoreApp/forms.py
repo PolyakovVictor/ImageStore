@@ -29,3 +29,9 @@ class PinForm(forms.Form):
 class AddFavoritePinForm(forms.Form):
     pin_id = forms.IntegerField()
     user_id = forms.IntegerField()
+
+
+class BoardForm(forms.Form):
+    user_id = forms.IntegerField()
+    title = forms.CharField(max_length=111, required=True)
+    description = forms.CharField(widget=forms.Textarea, required=True)

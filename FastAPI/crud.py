@@ -37,7 +37,8 @@ def update_pin(db: Session, object: PinSchema, object_id: int, image: str, descr
 
 
 def create_board(db: Session, object: BoardSchema):
-    _board = Board(title=object.title, description=object.description, owner_id=object.owner_id)
+    print(object)
+    _board = Board(title=object.title, description=object.description, owner_id=object.user_id)
     db.add(_board)
     db.commit()
     db.refresh(_board)

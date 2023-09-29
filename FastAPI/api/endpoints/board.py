@@ -34,11 +34,17 @@ async def get_by_id(id: int, db: Session = Depends(get_db)):
     return crud.get_by_id(db, Board, id)
 
 
+@router_board.get("/get_all_user_boards/{user_id}")
+async def get_all_user_boards(user_id: int, db: Session = Depends(get_db)):
+    boards = db.query(Board).filter(Board.owner_id == user_id).all()
+    return boards
+
+
 @router_board.post("/update")
 async def update(request: RequestBoard, db: Session = Depends(get_db)):
     return crud.update_board(db, board_id=request.parameter.id, title=request.parameter.title, description=request.parameter.description)
 
 
-@router_board.post("/delete/{id}")
+@router_board.delete("/delete/{id}")
 async def delete(id: int, db: Session = Depends(get_db)):
     return crud.remove(db, Board, id)

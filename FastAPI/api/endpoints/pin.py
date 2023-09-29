@@ -80,7 +80,7 @@ async def update(request: RequestPin, db: Session = Depends(get_db)):
     return crud.update_pin(db, Pin, object_id=request.parameter.id, image=request.parameter.image, description=request.parameter.description)
 
 
-@router_pin.post("/delete/{id}")
+@router_pin.delete("/delete/{id}")
 async def delete(id: int, db: Session = Depends(get_db)):
     return crud.remove(db, Pin, id)
 
@@ -106,10 +106,22 @@ async def add_pin_to_favorite(request: RequestFavoritePin, db: Session = Depends
     return favorite_pin
 
 
+@router_pin.get("/get_all_user_pins/{user_id}")
+async def get_all_user_pins(user_id: int, db: Session = Depends(get_db)):
+    pins = db.query(Pin).filter(Pin.user_id == user_id).all()
+    return pins
+
+
 @router_pin.post("/get_favorite_pin_for_user/{user_id}")
 async def get_favorite_pin_for_user(user_id: int, db: Session = Depends(get_db)):
     favorite_pins = db.query(FavoritePin).filter(FavoritePin.user_id == user_id).all()
     return favorite_pins
+
+
+@router_pin.post("/pins_sort_by_board/{board_id}")
+async def pins_sort_by_board(board_id: int, db: Session = Depends(get_db)):
+    pins = db.query(Pin).filter(Pin.board_id == board_id).all()
+    return pins
 
 
 @router_pin.delete("/remove_favorite_pin/{favorite_pin_id}")

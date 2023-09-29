@@ -1,5 +1,6 @@
 __pycache__/
 myenv/
+Django/ImageStore/imageStoreApp/static/images/
 venv/
 .vscode/
 *.sqlite3
