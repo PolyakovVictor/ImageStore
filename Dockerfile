@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
-COPY .env /app/.env
-
 RUN pip install poetry && poetry install
 
 COPY FastAPI /app/FastAPI

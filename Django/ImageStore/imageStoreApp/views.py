@@ -136,5 +136,9 @@ def create_board_view(request):
 
 
 def board_detail_view(request, board_id):
-    
     return render(request, 'imageStore/board_detail.html')
+
+
+def daily_view(request):
+
+    return render(request, 'imageStore/daily.html')

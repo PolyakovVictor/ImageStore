@@ -70,6 +70,14 @@ async def get(db: Session = Depends(get_db)):
     return crud.get_all(db, Pin, 0, 100)
 
 
+@router_pin.get('pagination/')
+async def pagination(db: Session = Depends(get_db), page_num: int = 1, page_size: int = 10):
+    data = crud.get_all(db, Pin, 0, 100)
+    start = (page_num - 1) * page_size
+    end = start + page_size
+    return data[start:end]
+
+
 @router_pin.get('/{id}')
 async def get_by_id(id: int, db: Session = Depends(get_db)):
     return crud.get_by_id(db, Pin, id)
